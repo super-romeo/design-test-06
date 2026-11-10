@@ -152,10 +152,18 @@ footer { background: #081833; border-top: 1px solid rgba(255,255,255,.14); }
 :root { --radius-card: 1rem; --radius-inner: .75rem; --radius-field: .625rem; --radius-pill: .625rem; }
 header a { border-radius: var(--radius-field); }
 
-/* ===== Cards 06: Grid 2x2 without card boxes (picture, text, link) ===== */
+/* ===== Cards 05: Grid 2x2, picture on the side ===== */
 .art { height: auto; aspect-ratio: 4 / 3; }
-#wat .tile { background: transparent; border-color: transparent; box-shadow: none; padding: 0; }
 @media (min-width: 768px) {
-.bento { gap: 3rem 2.5rem; }
 .bento > *, .bento > .wide { grid-column: span 6; }
+#wat .tile { display: grid; grid-template-columns: minmax(0, 11rem) minmax(0, 1fr); column-gap: 1.5rem; align-items: center; }
+#wat .tile .art { grid-row: 1 / span 3; }
+#wat .tile > :not(.art) { grid-column: 2; }
+#wat .tile { padding: 1.5rem; }
+}
+
+/* ===== Hero 06: Facts inside the text column, tall picture ===== */
+@media (min-width: 768px) {
+main > section:first-of-type .facts { grid-column: 1; grid-template-columns: repeat(2, minmax(0, 1fr)); margin-top: 0; }
+main > section:first-of-type > .shot { grid-column: 2; grid-row: 1 / span 2; height: 100%; object-fit: cover; }
 }

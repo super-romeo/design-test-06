@@ -3,20 +3,20 @@
 
 :root {
   /* colour — smokes' house palette (СМ-04); one blue accent, white text passes AA */
-  --canvas: #fcfcfc;                    /* page */
+  --canvas: #fdfbfb;                    /* page */
   --surface: #ffffff;                   /* cards */
-  --ink: #05080b;                       /* text */
-  --steel: #5c646f;                     /* secondary text */
-  --line: #dfe1e5;                      /* borders */
-  --border: #dfe1e5;                    /* borders on cards */
-  --accent: #006acf;
-  --accent-ink: #006acf;
-  --accent-wash: #d6efff;
-  --focus: #0086dd;
+  --ink: #17070a;                       /* text */
+  --steel: #6b5c5f;                     /* secondary text */
+  --line: #e7dddf;                      /* borders */
+  --border: #e7dddf;                    /* borders on cards */
+  --accent: #b3123b;
+  --accent-ink: #b3123b;
+  --accent-wash: #fbdde5;
+  --focus: #de3a62;
   --shadow: 0 20px 40px -15px rgba(0, 0, 0, .05);  /* Diffused Shadow */
   /* type — one family, Inter */
-  --font-sans: "Source Sans 3", "Segoe UI", system-ui, sans-serif;
-  --font-mono: "Source Sans 3", "Segoe UI", system-ui, sans-serif;
+  --font-sans: "Inter", "Segoe UI", system-ui, sans-serif;
+  --font-mono: "Inter", "Segoe UI", system-ui, sans-serif;
   --text-display: clamp(2.25rem, 5vw, 3.75rem);
   --text-h2: clamp(1.75rem, 3vw, 2.5rem);
   --text-h3: 1.25rem;
@@ -68,7 +68,7 @@ section > * + * { margin-top: clamp(2rem, 4vw, 3rem); }
 .bento > .wide { grid-column: span 7; }
 
 /* header, footer (also replace the shared base: white header, navy footer) */
-header { position: sticky; top: 0; z-index: 10; background: rgba(252, 252, 252, .86); backdrop-filter: blur(12px); border-bottom: 1px solid var(--line); }
+header { position: sticky; top: 0; z-index: 10; background: rgba(253, 251, 251, .86); backdrop-filter: blur(12px); border-bottom: 1px solid var(--line); }
 header .shell { display: flex; flex-wrap: wrap; align-items: center; justify-content: space-between; min-height: 64px; }
 header nav { display: flex; flex-wrap: wrap; }
 header a { display: inline-flex; align-items: center; gap: .6rem; min-height: 44px; padding: 0 .75rem; border-radius: var(--radius-pill); color: var(--steel); text-decoration: none; transition: background-color var(--dur) var(--spring), color var(--dur) var(--spring); }

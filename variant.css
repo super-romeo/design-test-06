@@ -148,7 +148,14 @@ footer a, footer p { color: #fff; }
 #start .tile select { background-color: #ffffff; color: #0a1524; border-color: #b9c3d2; }
 #start .tile .button:not(.quiet) { background: #12397a; border-color: #12397a; color: #ffffff; }
 footer { background: #081833; border-top: 1px solid rgba(255,255,255,.14); }
-/* ===== Shape 06: Medium radius, soft cards: shadow, no border ===== */
+/* ===== Shape 02: Medium radius, rounded-rectangle buttons ===== */
 :root { --radius-card: 1rem; --radius-inner: .75rem; --radius-field: .625rem; --radius-pill: .625rem; }
 header a { border-radius: var(--radius-field); }
-.tile { border-color: transparent; box-shadow: 0 1px 2px rgba(10,21,36,.06), 0 12px 32px -12px rgba(10,21,36,.18); }
+
+/* ===== Cards 06: Grid 2x2 without card boxes (picture, text, link) ===== */
+.art { height: auto; aspect-ratio: 4 / 3; }
+#wat .tile { background: transparent; border-color: transparent; box-shadow: none; padding: 0; }
+@media (min-width: 768px) {
+.bento { gap: 3rem 2.5rem; }
+.bento > *, .bento > .wide { grid-column: span 6; }
+}

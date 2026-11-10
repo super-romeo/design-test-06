@@ -162,8 +162,12 @@ header a { border-radius: var(--radius-field); }
 #wat .tile { padding: 1.5rem; }
 }
 
-/* ===== Hero 06: Facts inside the text column, tall picture ===== */
-@media (min-width: 768px) {
-main > section:first-of-type .facts { grid-column: 1; grid-template-columns: repeat(2, minmax(0, 1fr)); margin-top: 0; }
-main > section:first-of-type > .shot { grid-column: 2; grid-row: 1 / span 2; height: 100%; object-fit: cover; }
-}
+/* ===== v5: first screen 07 — picture in a window frame (three dots in the bar, lighter shadow) ===== */
+.window { margin: 0; align-self: center; overflow: hidden; background: var(--surface); border: 1px solid #c9d2e0; border-radius: var(--radius-inner);
+  box-shadow: 0 24px 48px -26px rgba(10, 21, 36, .30), 0 2px 6px rgba(10, 21, 36, .06); }
+.window::before { content: ""; display: block; height: 30px; border-bottom: 1px solid #d5dbe6;
+  background: radial-gradient(circle at 16px 15px, #b9c3d2 4px, transparent 5px), radial-gradient(circle at 32px 15px, #b9c3d2 4px, transparent 5px),
+    radial-gradient(circle at 48px 15px, #b9c3d2 4px, transparent 5px), #e9edf3; }
+.window .shot { border: 0; border-radius: 0; box-shadow: none; }
+/* ===== Density 06: As now, smaller quieter headline ===== */
+:root { --text-display: clamp(2rem, 4vw, 3rem); --text-h2: clamp(1.5rem, 2.4vw, 2rem); }

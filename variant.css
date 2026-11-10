@@ -1,176 +1,132 @@
-/* Variant: current kit + Emil Kowalski skills (mobile-native, animate, emil-design-eng).
-   Keeps the shared kit look (accent #006acf, pill buttons, white cards) and only adds:
-   phone-first touch behaviour, a thumb-reachable hero CTA on phones, press feedback,
-   and restrained CSS-only entrance motion. Self-sufficient for type sizes. */
+/* Stitch Design Taste (DESIGN.md "Taste Standard": creativity 8, density 4, variance 8, motion 6).
+   Tokens from the style, then general rules only. */
 
-:root{
-  --bg:#fcfcfc; --ink:#05080b; --muted:#5c646f; --line:#dfe1e5; --card:#ffffff;
-  --alt:#f7f8f9; --accent:#006acf; --accent-soft:#d6efff; --accent-num:#b1ddff; --navy:#05080b;
-  --focus:#0086dd; --accent-press:#006acf;
-  --warn:#9a6700; --warn-soft:rgba(154,103,0,.14);
-  --shadow:rgba(5,8,11,.18);
-  --font:Inter,ui-sans-serif,system-ui,-apple-system,"Segoe UI",Roboto,Helvetica,Arial,sans-serif;
-  --radius:12px; --radius-lg:21.6px;
-  /* Emil's curves: strong ease-out for UI, iOS drawer curve for the bottom bar */
-  --ease-out:cubic-bezier(0.23, 1, 0.32, 1);
-  --ease-drawer:cubic-bezier(0.32, 0.72, 0, 1);
-  --press:160ms;
-  --safe-b:env(safe-area-inset-bottom, 0px);
+:root {
+  /* colour — smokes' house palette (СМ-04); one blue accent, white text passes AA */
+  --canvas: #fcfcfc;                    /* page */
+  --surface: #ffffff;                   /* cards */
+  --ink: #05080b;                       /* text */
+  --steel: #5c646f;                     /* secondary text */
+  --line: #dfe1e5;                      /* borders */
+  --border: #dfe1e5;                    /* borders on cards */
+  --accent: #006acf;
+  --accent-ink: #006acf;
+  --accent-wash: #d6efff;
+  --focus: #0086dd;
+  --shadow: 0 20px 40px -15px rgba(0, 0, 0, .05);  /* Diffused Shadow */
+  /* type — one family, Inter */
+  --font-sans: "Source Sans 3", "Segoe UI", system-ui, sans-serif;
+  --font-mono: "Source Sans 3", "Segoe UI", system-ui, sans-serif;
+  --text-display: clamp(2.25rem, 5vw, 3.75rem);
+  --text-h2: clamp(1.75rem, 3vw, 2.5rem);
+  --text-h3: 1.25rem;
+  --text-body: 1.0625rem;
+  --text-meta: .8125rem;
+  --tracking: -.025em;
+  --leading-tight: 1.1;
+  --leading-body: 1.65;
+  /* space, shape — §4, §6, §7 */
+  --max: 1400px;
+  --gutter: clamp(1rem, 4vw, 4rem);
+  --section: 6rem;                      /* 3rem below 768px, see media */
+  --gap: clamp(2rem, 5vw, 5rem);
+  --pad-card: 2.5rem;                   /* 1.5rem below 768px */
+  --radius-card: 2.5rem;
+  --radius-inner: 1.5rem;
+  --radius-field: 1rem;
+  --radius-pill: 999px;
+  /* motion — §8, spring approximated as a cubic curve */
+  --spring: cubic-bezier(.2, .9, .25, 1);
+  --dur: .6s;
 }
 
-/* ---------- platform layer (mobile-native) ---------- */
-html{-webkit-tap-highlight-color:transparent;-webkit-text-size-adjust:100%}
-body{font-size:16px;line-height:24px;overflow-x:clip;background:var(--bg);color:var(--ink);font-family:var(--font)}
-a,select,label{touch-action:manipulation}
-a.cta,.btn,nav.top a,.logo a{user-select:none;-webkit-user-select:none;-webkit-touch-callout:none}
-:focus-visible{outline:2px solid var(--focus);outline-offset:3px;border-radius:999px}
+*, *::before, *::after { box-sizing: border-box; }
+html { scroll-behavior: smooth; }
+body { margin: 0; background: var(--canvas); color: var(--ink); font: 400 var(--text-body)/var(--leading-body) var(--font-sans); -webkit-font-smoothing: antialiased; }
+h1, h2, h3 { margin: 0; color: var(--ink); font-weight: 600; letter-spacing: var(--tracking); line-height: var(--leading-tight); text-wrap: balance; }
+h1 { font-size: var(--text-display); }
+h2 { font-size: var(--text-h2); }
+h3 { font-size: var(--text-h3); }
+p { margin: 0; color: var(--steel); max-width: 65ch; }
+b { font-weight: 600; color: var(--ink); }
+a { color: inherit; }
+svg { display: block; }
+:focus-visible, select:focus { outline: 2px solid var(--focus); outline-offset: 2px; }
 
-/* ---------- type (restated so the page holds without the remote base) ---------- */
-h1{font-size:56px;line-height:1.1;letter-spacing:-1.4px;font-weight:700;text-wrap:balance;max-width:18ch}
-h2{font-size:40px;line-height:1.1;letter-spacing:-1px;font-weight:700;text-wrap:balance}
-h3{font-size:20px;line-height:28px;letter-spacing:-.4px;font-weight:700}
-.sub{font-size:20px;line-height:32px;color:var(--muted);max-width:640px;text-wrap:pretty}
-.fine,.cta-note{font-size:14px;line-height:20px}
+/* layout */
+.shell { max-width: var(--max); margin: 0 auto; padding: 0 var(--gutter); }
+section { padding: var(--section) 0; border-top: 1px solid var(--line); scroll-margin-top: 64px; }
+main > section:first-child { border-top: 0; }
+section > * + * { margin-top: clamp(2rem, 4vw, 3rem); }
+.split { display: grid; grid-template-columns: var(--cols, minmax(0, 7fr) minmax(0, 5fr)); gap: 1.5rem var(--gap); }
+.flip { --cols: minmax(0, 5fr) minmax(0, 7fr); }
+.split > * + * { margin-top: 0; }
+.stack { display: grid; gap: 1.25rem; align-content: start; justify-items: start; }
+.cluster { display: flex; flex-wrap: wrap; gap: .5rem; }
+.bento { display: grid; grid-template-columns: repeat(12, minmax(0, 1fr)); gap: 1rem; }
+.bento > * { grid-column: span 5; }
+.bento > .wide { grid-column: span 7; }
 
-/* ---------- hero ---------- */
-.hero{padding:72px 0 40px}
-.hero .cta-note{display:flex;align-items:center;gap:8px}
-.hero .cta-note::before{content:"";flex:none;width:8px;height:8px;border-radius:50%;background:var(--warn);box-shadow:0 0 0 4px var(--warn-soft)}
+/* header, footer (also replace the shared base: white header, navy footer) */
+header { position: sticky; top: 0; z-index: 10; background: rgba(252, 252, 252, .86); backdrop-filter: blur(12px); border-bottom: 1px solid var(--line); }
+header .shell { display: flex; flex-wrap: wrap; align-items: center; justify-content: space-between; min-height: 64px; }
+header nav { display: flex; flex-wrap: wrap; }
+header a { display: inline-flex; align-items: center; gap: .6rem; min-height: 44px; padding: 0 .75rem; border-radius: var(--radius-pill); color: var(--steel); text-decoration: none; transition: background-color var(--dur) var(--spring), color var(--dur) var(--spring); }
+header a:hover { color: var(--ink); background: var(--surface); }
+header .home { padding-left: 0; color: var(--ink); font-weight: 600; }
+footer { padding: 2.5rem 0 3rem; background: transparent; color: var(--ink); border-top: 1px solid var(--line); font-size: .9375rem; }
+footer a { display: inline-flex; align-items: center; min-height: 44px; color: var(--ink); font-weight: 500; text-underline-offset: 3px; }
 
-/* hero picture takes the box of the former flow strip; facts row under it */
-img{display:block;max-width:100%;height:auto;object-fit:cover}
-.hero-pic{width:100%;max-width:640px;aspect-ratio:3/2;margin:40px 0 0;border:1px solid var(--line);border-radius:var(--radius-lg)}
-.facts{display:grid;grid-template-columns:repeat(4,minmax(0,1fr));gap:12px 20px;margin:28px 0 0}
-.facts dt{color:var(--muted);font-size:14px;line-height:20px}
-.facts dd{margin:4px 0 0;font-weight:600;font-size:16px;line-height:24px}
-.h2-sub{color:var(--muted);font-size:20px;line-height:32px;margin:-8px 0 28px;max-width:640px}
-.start-text{color:var(--muted);margin:-8px 0 24px}
-footer .logo{margin:0 0 4px}
+/* components */
+.meta { display: inline-flex; align-items: center; gap: .5rem; font: 500 var(--text-meta)/1.4 var(--font-mono); letter-spacing: .02em; color: var(--steel); }
+.soft { color: var(--steel); }
+.button { display: inline-flex; align-items: center; justify-content: center; gap: .6rem; min-height: 52px; padding: 0 1.5rem; border: 1px solid var(--accent); border-radius: var(--radius-pill); background: var(--accent); color: #ffffff; font-weight: 600; text-decoration: none; transition: transform var(--dur) var(--spring), background-color var(--dur) var(--spring), border-color var(--dur) var(--spring); }
+.button:hover { background: var(--accent-ink); }
+.button:active { transform: translateY(1px) scale(.98); }
+.button::after { content: ""; width: 1.1em; height: 1.1em; background: currentColor; -webkit-mask: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 24 24' fill='none' stroke='%23006acf' stroke-width='2' stroke-linecap='round' stroke-linejoin='round'%3E%3Cpath d='M5 12h14M13 6l6 6-6 6'/%3E%3C/svg%3E") center / contain no-repeat; mask: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 24 24' fill='none' stroke='%23006acf' stroke-width='2' stroke-linecap='round' stroke-linejoin='round'%3E%3Cpath d='M5 12h14M13 6l6 6-6 6'/%3E%3C/svg%3E") center / contain no-repeat; }
+.button.quiet { min-height: 44px; border-color: var(--line); background: var(--surface); color: var(--ink); font-weight: 500; }
+.button.quiet:hover { border-color: var(--accent); }
+.art { width: 100%; height: clamp(12rem, 20vw, 16rem); overflow: hidden; border-radius: var(--radius-inner); background: var(--canvas); }
+.art img { display: block; width: 100%; height: 100%; object-fit: cover; }
+.rows { width: 100%; margin: 0; padding: 0; list-style: none; counter-reset: n; }
+.rows > * { padding: 1rem 0; border-top: 1px solid var(--line); }
+.rows > :first-child { border-top: 0; }
+.rows > li { display: grid; grid-template-columns: auto minmax(0, 1fr) auto; gap: 1rem; align-items: center; }
+.rows svg { width: 100%; height: 34px; }
+ol.rows > li::before { counter-increment: n; content: counter(n, decimal-leading-zero); align-self: start; font: 500 var(--text-meta)/1.8 var(--font-mono); color: var(--steel); }
+.tile { margin: 0; padding: var(--pad-card); background: var(--surface); border: 1px solid var(--border); border-radius: var(--radius-card); box-shadow: var(--shadow); }
+.badge { display: inline-flex; align-items: center; gap: .5rem; padding: .4rem .75rem; border: 1px solid var(--line); border-radius: var(--radius-pill); background: var(--surface); color: var(--steel); font: 500 .75rem/1.2 var(--font-mono); white-space: nowrap; }
+.badge.on { border-color: transparent; background: var(--accent-wash); color: var(--ink); }
+.dot { width: 8px; height: 8px; flex: none; border-radius: 50%; background: var(--accent); }
+.skel { height: 10px; border-radius: var(--radius-pill); background: linear-gradient(90deg, var(--canvas), var(--line), var(--canvas)) 0 0 / 200% 100%; }
+label { display: grid; gap: .5rem; width: 100%; font-weight: 500; }
+select { width: 100%; min-width: 0; min-height: 52px; padding: 0 1rem; font: inherit; color: var(--ink); background: var(--surface); border: 1px solid var(--line); border-radius: var(--radius-field); }
 
-/* ---------- buttons: press feedback on pointer-down, hover only for mice ---------- */
-a.cta,.btn{
-  transition:transform var(--press) var(--ease-out),opacity 150ms ease,background-color 150ms ease,box-shadow 150ms ease;
-}
-a.cta{color:#ffffff;background:var(--accent);font-size:16px;line-height:24px;font-weight:600;min-height:56px}
-.btn{color:var(--ink);background:var(--card);font-size:14px;line-height:20px;min-height:44px;display:inline-flex;align-items:center}
-a.cta:hover,a.cta:active{color:#ffffff}
-.btn:hover,.btn:active{color:var(--ink)}
-a.cta:active,.btn:active{transform:scale(.97)}
-a.cta:active{background:var(--accent-press)}
-.btn:active{background:var(--alt)}
-@media not all and (hover:hover) and (pointer:fine){
-  a.cta:hover{opacity:1}
-  .btn:hover{background:var(--card)}
-  .btn:active{background:var(--alt)}
-}
-@media (hover:hover) and (pointer:fine){
-  a.cta:hover{opacity:.9;background:var(--accent-press);box-shadow:0 6px 20px -6px var(--shadow)}
-  .card{transition:border-color 150ms ease,box-shadow 150ms ease}
-  .card:hover{border-color:var(--line);box-shadow:0 10px 30px -18px var(--shadow)}
-}
+/* hero: left text, right drawn phone; inline glyphs between words (§5) */
+.shot { display: block; align-self: center; width: 100%; height: auto; aspect-ratio: 3 / 2; object-fit: cover; border: 1px solid var(--border); border-radius: var(--radius-card); box-shadow: var(--shadow); }
+.facts { grid-column: 1 / -1; display: grid; grid-template-columns: repeat(4, minmax(0, 1fr)); gap: 1rem var(--gap); margin: 1.5rem 0 0; padding-top: 1.5rem; border-top: 1px solid var(--line); }
+.facts dt { font: 500 var(--text-meta)/1.4 var(--font-mono); letter-spacing: .02em; color: var(--steel); }
+.facts dd { margin: .25rem 0 0; font-weight: 600; }
 
-/* ---------- features ---------- */
-#que .grid{grid-template-columns:repeat(2,1fr)}
-.card{font-size:16px;line-height:24px}
-.card > b{font-size:20px;line-height:28px}
-.card-pic{width:100%;aspect-ratio:4/3;border-radius:var(--radius);margin-bottom:12px}
-.card span{flex:1}
-.card br{display:none}
-.card .btn{margin-top:16px}
-
-/* ---------- example: a card that reads like a job log ---------- */
-.story{background:var(--card);border:1px solid var(--line);border-radius:var(--radius-lg);padding:28px 32px;margin:0 0 28px;max-width:720px}
-.story .fine{margin:0 0 8px}
-.story-pic,.example-pic{width:100%;aspect-ratio:3/2;border-radius:var(--radius);margin:20px 0 0}
-.story p{margin:0;font-size:18px;line-height:28px;color:var(--ink);text-wrap:pretty}
-
-/* ---------- SEO text: comfortable measure ---------- */
-#opis p{max-width:68ch;font-size:17px;line-height:28px;color:var(--ink);margin:0 0 18px}
-#opis p:first-of-type{font-size:20px;line-height:32px;color:var(--ink)}
-
-/* ---------- FAQ as quiet cards ---------- */
-.faq-list{display:grid;grid-template-columns:repeat(2,1fr);gap:16px}
-.faq-list > div{background:var(--card);border:1px solid var(--line);border-radius:var(--radius-lg);padding:24px}
-.faq-list h3{margin:0 0 8px}
-.faq-list p{margin:0;color:var(--muted);font-size:16px;line-height:24px}
-
-/* ---------- start panel ---------- */
-.panel{background:var(--card);border:1px solid var(--line);border-radius:var(--radius-lg);padding:32px;max-width:560px}
-.panel label{display:block;font-weight:600;font-size:16px;line-height:24px}
-.panel select{display:block;width:100%;margin:10px 0 20px;min-height:52px;font-size:16px;padding:12px 14px}
-.panel a.cta{margin:0}
-
-/* ---------- footer: real tap targets ---------- */
-nav.top a{color:var(--muted)}
-footer{font-size:14px;line-height:20px;background:var(--alt);color:var(--ink);border-top:1px solid var(--line)}
-footer a{display:inline-flex;align-items:center;min-height:44px;color:var(--accent)}
-footer .muted{color:var(--muted)}
-footer p{margin:0}
-
-/* ---------- phones ---------- */
-@media (max-width:760px){
-  h1{font-size:36px;line-height:1.15;letter-spacing:-.8px}
-  h2{font-size:30px;letter-spacing:-.6px}
-  .sub{font-size:18px;line-height:28px}
-  .hero{padding:40px 0 24px}
-  .hero-pic{margin-top:28px}
-  .facts{grid-template-columns:repeat(2,minmax(0,1fr));margin-top:20px}
-  .h2-sub{font-size:18px;line-height:28px}
-  .faq-list,#que .grid{grid-template-columns:1fr}
-  .story{padding:22px 20px}
-  .panel{padding:24px 20px}
-  .card{padding:24px}
-  #opis p{font-size:16px;line-height:26px}
-  #opis p:first-of-type{font-size:18px;line-height:28px}
-
-  /* The existing hero CTA (same element, same data-ev) becomes a bottom bar in thumb reach. */
-  .hero a.cta{
-    position:fixed;z-index:25;left:16px;right:16px;bottom:calc(12px + var(--safe-b));
-    margin:0;box-shadow:0 10px 28px -8px var(--shadow),0 0 0 4px rgba(252,252,252,.9);
-  }
-  .hero .cta-note{margin-top:20px}
-  footer{padding-bottom:calc(28px + 84px + var(--safe-b))}
+@media (max-width: 767px) {
+  :root { --section: 3rem; --pad-card: 1.5rem; }
+  .split { grid-template-columns: minmax(0, 1fr); }
+  .bento > *, .bento > .wide { grid-column: 1 / -1; }
+  .button { width: 100%; }
+  .facts { grid-template-columns: repeat(2, minmax(0, 1fr)); }
+  header nav { margin-left: -.75rem; }
 }
 
-/* ---------- motion (animate skill) ----------
-   Gate: first visit of a marketing page = rare tier; purpose = explanation (the flow strip)
-   and preventing a jarring pop-in. Tool: CSS keyframes on load, scroll-driven where supported.
-   Properties: opacity + transform only. Curve: --ease-out. Stagger 60-80ms. */
-@media (prefers-reduced-motion:no-preference){
-  @keyframes rise{from{opacity:0;transform:translateY(8px)}}
-  @keyframes bar-in{from{opacity:0;transform:translateY(calc(100% + 24px))}}
-  @keyframes reveal{from{opacity:0;transform:translateY(16px)}}
-
-  .hero > *{animation:rise 520ms var(--ease-out) both}
-  .hero > :nth-child(2){animation-delay:60ms}
-  .hero > :nth-child(3){animation-delay:120ms}
-  .hero > :nth-child(4){animation-delay:180ms}
-  .hero > :nth-child(5){animation-delay:240ms}
-  .hero > :nth-child(6){animation-delay:300ms}
-  .hero > :nth-child(7){animation-delay:360ms}
-
-  @media (max-width:760px){
-    .hero a.cta{animation:bar-in 420ms var(--ease-drawer) 200ms both}
-    .hero a.cta:active{transform:scale(.97)}
-  }
-
-  /* Section entrance: tied to scroll, so it never blocks reading and never runs off-screen. */
-  @supports (animation-timeline:view()){
-    section > h2,section > .grid > .card,section > .story,section > .faq-list > div,#opis > p,section > .panel{
-      animation:reveal linear both;
-      animation-timing-function:var(--ease-out);
-      animation-timeline:view();
-      animation-range:entry 0% entry 70%;
-    }
-    section > .grid > .card:nth-child(2),section > .faq-list > div:nth-child(even){animation-range:entry 10% entry 80%}
-    section > .grid > .card:nth-child(3){animation-range:entry 20% entry 90%}
-    section > .grid > .card:nth-child(4){animation-range:entry 30% entry 100%}
+@media (prefers-reduced-motion: no-preference) {
+  @keyframes rise { from { opacity: 0; transform: translateY(16px); } }
+  @keyframes pulse { 50% { opacity: .4; transform: scale(.75); } }
+  @keyframes shimmer { to { background-position: -200% 0; } }
+  .rise { animation: rise .9s var(--spring) calc(var(--i, 0) * 100ms) both; }
+  .dot { animation: pulse 2s ease-in-out infinite; }
+  .skel { animation: shimmer 2.4s ease-in-out infinite; }
+  @supports (animation-timeline: view()) {
+    .reveal { animation: rise var(--spring) both; animation-timeline: view(); animation-range: entry 0% entry 100%; }
   }
 }
-/* Reduced motion: fewer and gentler, not zero — keep a soft fade, drop all movement and scale. */
-@media (prefers-reduced-motion:reduce){
-  @keyframes fade{from{opacity:0}}
-  .hero > *{animation:fade 200ms ease both}
-  a.cta,.btn{transition:opacity 150ms ease,background-color 150ms ease}
-  a.cta:active,.btn:active{transform:none}
-}
+
+

@@ -174,15 +174,89 @@ header a { border-radius: var(--radius-field); }
 :root { --section: 4rem; --gap: clamp(1.5rem, 3.5vw, 3.5rem); --pad-card: 1.75rem; }
 }
 
-/* ===== Header 06: Button in header; footer in one row ===== */
+/* ===== Header 07: Button in header; light grey footer ===== */
 header nav a:last-child { background: var(--accent); color: #fff; padding: 0 1rem; margin-left: .5rem; font-weight: 600; }
 header nav a:last-child:hover { background: var(--accent); color: #fff; opacity: .92; }
 @media (max-width: 767px) {
 header .shell { position: relative; }
 header nav a:last-child { position: absolute; top: 10px; right: var(--gutter); margin: 0; }
 }
-@media (min-width: 768px) {
-footer .shell { display: grid; grid-template-columns: 1fr auto; align-items: center; gap: .25rem 2rem; }
-footer .shell p { margin: 0; }
-footer .shell p:last-child { grid-column: 1 / -1; }
+footer { background: #eef2f7; color: #0a1524; --ink: #0a1524; --steel: #566174; border-top: 1px solid #dde2ea; }
+footer a, footer p { color: #0a1524; }
+
+/* ===== v7: header button aligned with the name row on phones (jury defect) ===== */
+@media (max-width: 767px) {
+  header .shell { min-height: 0; padding-top: 6px; padding-bottom: 4px; row-gap: 0; }
+  header .home { min-height: 40px; }
+  header nav a:last-child { top: 6px; min-height: 40px; }
+}
+/* ===== Motion 04: Load cascade only, no reveal on scroll, static dot ===== */
+.reveal, .dot, .skel { animation: none !important; }
+
+/* ===== Commands 06: Impeccable: delight ===== */
+/* ===== command: delight ===== */
+/* Thesis: the page answers the hand like a well-made instrument — instantly, precisely, the same way every time.
+   Feedback only: nothing here moves without a pointer, a finger or a key; nothing delays content. */
+@property --chrome-dot { syntax: "<color>"; inherits: true; initial-value: #b9c3d2; }
+:root {
+  --dur: .18s;                          /* was .6s: hover answers at once */
+  --dur-press: .07s;                    /* going down is faster than coming back */
+  --tint: rgba(10, 21, 36, .22);        /* ink laid over a filled control on hover */
+  --nudge: 4px;                         /* how far the arrow leads */
+}
+html { -webkit-tap-highlight-color: transparent; }
+::selection { background: #dfe8f7; color: #0a1524; }
+
+/* focus: the ring steps out from the control instead of just appearing */
+a, select { outline-offset: 0; }
+:focus-visible, select:focus { outline-offset: 3px; transition: outline-offset var(--dur) var(--spring); }
+
+/* buttons: press goes down fast, comes back on the spring; the arrow leads */
+.button, header a { transition: transform var(--dur) var(--spring), background-color var(--dur) var(--spring), border-color var(--dur) var(--spring), color var(--dur) var(--spring), box-shadow var(--dur) var(--spring); }
+.button::after, .art img { transition: transform var(--dur) var(--spring); }
+.button:active, header a:active { transform: scale(.97); transition-duration: var(--dur-press); }
+.button:not(.quiet):active, header nav a:last-child:active { box-shadow: inset 0 0 0 100vmax var(--tint); }
+.button:active::after { transform: translateX(var(--nudge)); transition-duration: var(--dur-press); }
+.button.quiet:active { border-color: var(--accent); background: var(--accent-wash); }
+header .home:active { transform: none; }
+footer a { text-decoration-thickness: 1px; transition: color var(--dur) var(--spring), text-decoration-thickness var(--dur) var(--spring); }
+footer a:active { color: var(--accent); }
+
+/* field: answers hover and choice */
+select { cursor: pointer; accent-color: var(--accent); transition: box-shadow var(--dur) var(--spring), outline-offset var(--dur) var(--spring); }
+select:focus { box-shadow: 0 0 0 5px var(--accent-wash); }
+
+/* window frame: its three dots take the accent while the picture is under the pointer */
+.window { --chrome-dot: #b9c3d2; transition: --chrome-dot var(--dur) var(--spring); }
+.window::before { background: radial-gradient(circle at 16px 15px, var(--chrome-dot) 4px, transparent 5px), radial-gradient(circle at 32px 15px, var(--chrome-dot) 4px, transparent 5px),
+    radial-gradient(circle at 48px 15px, var(--chrome-dot) 4px, transparent 5px), #e9edf3; }
+
+@media (hover: hover) {
+  .button:not(.quiet):hover, header nav a:last-child:hover { opacity: 1; box-shadow: inset 0 0 0 100vmax var(--tint); }
+  .button:hover::after { transform: translateX(var(--nudge)); }
+  .button.quiet:hover { background: var(--accent-wash); color: var(--accent); }
+  header nav a:hover { background: var(--accent-wash); color: var(--accent); }
+  header .home:hover { background: transparent; }
+  footer a:hover { color: var(--accent); text-decoration-thickness: 2px; }
+  select:hover { box-shadow: inset 0 0 0 1px var(--steel); }
+  select:focus:hover { box-shadow: 0 0 0 5px var(--accent-wash); }
+  .window:hover { --chrome-dot: var(--accent); }
+  /* card: the picture leans in and the card's own arrow points the way */
+  .tile { transition: border-color var(--dur) var(--spring); }
+  .tile:hover { border-color: #b9c3d2; }
+  .tile:hover .art img { transform: scale(1.035); }
+  .tile:hover .button::after { transform: translateX(calc(var(--nudge) / 2)); }
+  .tile .button:hover::after { transform: translateX(var(--nudge)); }
+}
+
+/* phones: name and header button keep their 40px look but take a 44px finger */
+@media (max-width: 767px) {
+  header .home { position: relative; }
+  header .home::before, header nav a:last-child::before { content: ""; position: absolute; inset: -2px 0; }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  html { scroll-behavior: auto; }
+  .button, .button::after, header a, .art img, :focus-visible, select { transition-duration: .01s; }
+  .button:active, header a:active, .button::after, .tile:hover .art img { transform: none !important; }
 }

@@ -1,0 +1,174 @@
+/* Variant: current kit + Emil Kowalski skills (mobile-native, animate, emil-design-eng).
+   Keeps the shared kit look (accent #006acf, pill buttons, white cards) and only adds:
+   phone-first touch behaviour, a thumb-reachable hero CTA on phones, press feedback,
+   and restrained CSS-only entrance motion. Self-sufficient for type sizes. */
+
+:root{
+  --bg:#fcfcfc; --ink:#05080b; --muted:#5c646f; --line:#dfe1e5; --card:#ffffff;
+  --alt:#f7f8f9; --accent:#006acf; --accent-soft:#d6efff; --accent-num:#b1ddff; --navy:#05080b;
+  --focus:#0086dd; --accent-press:#006acf;
+  --warn:#9a6700; --warn-soft:rgba(154,103,0,.14);
+  --shadow:rgba(5,8,11,.18);
+  --font:Inter,ui-sans-serif,system-ui,-apple-system,"Segoe UI",Roboto,Helvetica,Arial,sans-serif;
+  --radius:12px; --radius-lg:21.6px;
+  /* Emil's curves: strong ease-out for UI, iOS drawer curve for the bottom bar */
+  --ease-out:cubic-bezier(0.23, 1, 0.32, 1);
+  --ease-drawer:cubic-bezier(0.32, 0.72, 0, 1);
+  --press:160ms;
+  --safe-b:env(safe-area-inset-bottom, 0px);
+}
+
+/* ---------- platform layer (mobile-native) ---------- */
+html{-webkit-tap-highlight-color:transparent;-webkit-text-size-adjust:100%}
+body{font-size:16px;line-height:24px;overflow-x:clip;background:var(--bg);color:var(--ink);font-family:var(--font)}
+a,select,label{touch-action:manipulation}
+a.cta,.btn,nav.top a,.logo a{user-select:none;-webkit-user-select:none;-webkit-touch-callout:none}
+:focus-visible{outline:2px solid var(--focus);outline-offset:3px;border-radius:999px}
+
+/* ---------- type (restated so the page holds without the remote base) ---------- */
+h1{font-size:56px;line-height:1.1;letter-spacing:-1.4px;font-weight:700;text-wrap:balance;max-width:18ch}
+h2{font-size:40px;line-height:1.1;letter-spacing:-1px;font-weight:700;text-wrap:balance}
+h3{font-size:20px;line-height:28px;letter-spacing:-.4px;font-weight:700}
+.sub{font-size:20px;line-height:32px;color:var(--muted);max-width:640px;text-wrap:pretty}
+.fine,.cta-note{font-size:14px;line-height:20px}
+
+/* ---------- hero ---------- */
+.hero{padding:72px 0 40px}
+.hero .cta-note{display:flex;align-items:center;gap:8px}
+.hero .cta-note::before{content:"";flex:none;width:8px;height:8px;border-radius:50%;background:var(--warn);box-shadow:0 0 0 4px var(--warn-soft)}
+
+/* "aviso -> parte -> factura" strip: explains the product in one glance */
+.flow{list-style:none;margin:40px 0 0;padding:0;display:grid;grid-template-columns:repeat(3,1fr);gap:12px;max-width:640px}
+.flow li{position:relative;display:flex;flex-direction:column;align-items:flex-start;gap:10px;padding:16px;background:var(--card);border:1px solid var(--line);border-radius:var(--radius-lg);font-size:14px;line-height:20px;font-weight:600;color:var(--ink)}
+.flow li + li::before{content:"";position:absolute;left:-10px;top:50%;width:8px;height:8px;border-top:1.5px solid var(--muted);border-right:1.5px solid var(--muted);transform:translate(-2px,-50%) rotate(45deg)}
+.flow svg{width:40px;height:40px;flex:none}
+
+/* ---------- buttons: press feedback on pointer-down, hover only for mice ---------- */
+a.cta,.btn{
+  transition:transform var(--press) var(--ease-out),opacity 150ms ease,background-color 150ms ease,box-shadow 150ms ease;
+}
+a.cta{color:#ffffff;background:var(--accent);font-size:16px;line-height:24px;font-weight:600;min-height:56px}
+.btn{color:var(--ink);background:var(--card);font-size:14px;line-height:20px;min-height:44px;display:inline-flex;align-items:center}
+a.cta:hover,a.cta:active{color:#ffffff}
+.btn:hover,.btn:active{color:var(--ink)}
+a.cta:active,.btn:active{transform:scale(.97)}
+a.cta:active{background:var(--accent-press)}
+.btn:active{background:var(--alt)}
+@media not all and (hover:hover) and (pointer:fine){
+  a.cta:hover{opacity:1}
+  .btn:hover{background:var(--card)}
+  .btn:active{background:var(--alt)}
+}
+@media (hover:hover) and (pointer:fine){
+  a.cta:hover{opacity:.9;background:var(--accent-press);box-shadow:0 6px 20px -6px var(--shadow)}
+  .card{transition:border-color 150ms ease,box-shadow 150ms ease}
+  .card:hover{border-color:var(--line);box-shadow:0 10px 30px -18px var(--shadow)}
+}
+
+/* ---------- features ---------- */
+#que .grid{grid-template-columns:repeat(2,1fr)}
+.card{font-size:16px;line-height:24px}
+.card > b{font-size:20px;line-height:28px}
+.card .ico{width:44px;height:44px;border-radius:12px;background:var(--accent-soft);display:grid;place-items:center;margin-bottom:10px}
+.card .ico svg{width:24px;height:24px}
+.card span{flex:1}
+.card br{display:none}
+.card .btn{margin-top:16px}
+
+/* ---------- example: a card that reads like a job log ---------- */
+.story{background:var(--card);border:1px solid var(--line);border-radius:var(--radius-lg);padding:28px 32px;margin:0 0 28px;max-width:720px}
+.story p{margin:0;font-size:18px;line-height:28px;color:var(--ink);text-wrap:pretty}
+
+/* ---------- SEO text: comfortable measure ---------- */
+#opis p{max-width:68ch;font-size:17px;line-height:28px;color:var(--ink);margin:0 0 18px}
+#opis p:first-of-type{font-size:20px;line-height:32px;color:var(--ink)}
+
+/* ---------- FAQ as quiet cards ---------- */
+.faq-list{display:grid;grid-template-columns:repeat(2,1fr);gap:16px}
+.faq-list > div{background:var(--card);border:1px solid var(--line);border-radius:var(--radius-lg);padding:24px}
+.faq-list h3{margin:0 0 8px}
+.faq-list p{margin:0;color:var(--muted);font-size:16px;line-height:24px}
+
+/* ---------- start panel ---------- */
+.panel{background:var(--card);border:1px solid var(--line);border-radius:var(--radius-lg);padding:32px;max-width:560px}
+.panel label{display:block;font-weight:600;font-size:16px;line-height:24px}
+.panel select{display:block;width:100%;margin:10px 0 20px;min-height:52px;font-size:16px;padding:12px 14px}
+.panel a.cta{margin:0}
+
+/* ---------- footer: real tap targets ---------- */
+nav.top a{color:var(--muted)}
+footer{font-size:14px;line-height:20px;background:var(--alt);color:var(--ink);border-top:1px solid var(--line)}
+footer a{display:inline-flex;align-items:center;min-height:44px;color:var(--accent)}
+footer .muted{color:var(--muted)}
+footer p{margin:0}
+
+/* ---------- phones ---------- */
+@media (max-width:760px){
+  h1{font-size:36px;line-height:1.15;letter-spacing:-.8px}
+  h2{font-size:30px;letter-spacing:-.6px}
+  .sub{font-size:18px;line-height:28px}
+  .hero{padding:40px 0 24px}
+  .flow{gap:10px;margin-top:28px}
+  .flow li{padding:12px;font-size:13px;line-height:18px}
+  .flow li + li::before{left:-8px;width:6px;height:6px}
+  .flow svg{width:32px;height:32px}
+  .faq-list,#que .grid{grid-template-columns:1fr}
+  .story{padding:22px 20px}
+  .panel{padding:24px 20px}
+  .card{padding:24px}
+  #opis p{font-size:16px;line-height:26px}
+  #opis p:first-of-type{font-size:18px;line-height:28px}
+
+  /* The existing hero CTA (same element, same data-ev) becomes a bottom bar in thumb reach. */
+  .hero a.cta{
+    position:fixed;z-index:25;left:16px;right:16px;bottom:calc(12px + var(--safe-b));
+    margin:0;box-shadow:0 10px 28px -8px var(--shadow),0 0 0 4px rgba(252,252,252,.9);
+  }
+  .hero .cta-note{margin-top:20px}
+  footer{padding-bottom:calc(28px + 84px + var(--safe-b))}
+}
+
+/* ---------- motion (animate skill) ----------
+   Gate: first visit of a marketing page = rare tier; purpose = explanation (the flow strip)
+   and preventing a jarring pop-in. Tool: CSS keyframes on load, scroll-driven where supported.
+   Properties: opacity + transform only. Curve: --ease-out. Stagger 60-80ms. */
+@media (prefers-reduced-motion:no-preference){
+  @keyframes rise{from{opacity:0;transform:translateY(8px)}}
+  @keyframes bar-in{from{opacity:0;transform:translateY(calc(100% + 24px))}}
+  @keyframes reveal{from{opacity:0;transform:translateY(16px)}}
+
+  .hero > *{animation:rise 520ms var(--ease-out) both}
+  .hero > :nth-child(2){animation-delay:60ms}
+  .hero > :nth-child(3){animation-delay:120ms}
+  .hero > :nth-child(4){animation-delay:180ms}
+  .hero > .flow{animation:none}
+  .flow li{animation:rise 480ms var(--ease-out) both}
+  .flow li:nth-child(1){animation-delay:260ms}
+  .flow li:nth-child(2){animation-delay:340ms}
+  .flow li:nth-child(3){animation-delay:420ms}
+
+  @media (max-width:760px){
+    .hero a.cta{animation:bar-in 420ms var(--ease-drawer) 200ms both}
+    .hero a.cta:active{transform:scale(.97)}
+  }
+
+  /* Section entrance: tied to scroll, so it never blocks reading and never runs off-screen. */
+  @supports (animation-timeline:view()){
+    section > h2,section > .grid > .card,section > .story,section > .faq-list > div,#opis > p,section > .panel{
+      animation:reveal linear both;
+      animation-timing-function:var(--ease-out);
+      animation-timeline:view();
+      animation-range:entry 0% entry 70%;
+    }
+    section > .grid > .card:nth-child(2),section > .faq-list > div:nth-child(even){animation-range:entry 10% entry 80%}
+    section > .grid > .card:nth-child(3){animation-range:entry 20% entry 90%}
+    section > .grid > .card:nth-child(4){animation-range:entry 30% entry 100%}
+  }
+}
+/* Reduced motion: fewer and gentler, not zero — keep a soft fade, drop all movement and scale. */
+@media (prefers-reduced-motion:reduce){
+  @keyframes fade{from{opacity:0}}
+  .hero > *{animation:fade 200ms ease both}
+  a.cta,.btn{transition:opacity 150ms ease,background-color 150ms ease}
+  a.cta:active,.btn:active{transform:none}
+}
